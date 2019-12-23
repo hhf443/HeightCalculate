@@ -83,8 +83,9 @@ public class MyAdapter extends ArrayAdapter<HeightInfo> {
     }
 
 //    删
-    public void remove(){
-
+    public void remove(int pos){
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.delete("heightinfo", "id = ?", new String[]{String.valueOf(getItem(pos).getId())});
     }
 
 //    查
@@ -106,5 +107,18 @@ public class MyAdapter extends ArrayAdapter<HeightInfo> {
             }while (cursor.moveToNext());
         }
         return infos;
+    }
+
+//    改
+    public void update(int pos){
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        HeightInfo hInfo = getItem(pos);
+        ContentValues values = new ContentValues();
+        values.put("name", hInfo.getName());
+        values.put("ismale", hInfo.isIsmale());
+        values.put("fheight", hInfo.getFheight());
+        values.put("mheight", hInfo.getMheight());
+        values.put("sheight", hInfo.getSheight());
+        db.update("heightinfo", values, "id = ?" , new String[]{String.valueOf(getItem(pos).getId())});
     }
 }
